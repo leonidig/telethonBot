@@ -15,25 +15,27 @@ client = TelegramClient('bot_session', api_id, api_hash)
 async def start(event):
     sender = await event.get_sender()
     first_name = sender.first_name
-    buttons = [
-            button.text("Ukraine", resize=True),
-            button.text("USA", resize=True),
-            button.text("Netherlands", resize=True)
-        ]
+    buttons=[
+                button.inline("США", b"usa"),
+                button.inline("УКРАИНА", b"ukr"),
+                button.inline("НИДЕРЛАНДЫ", b"ndr"),
+                ]
     await event.respond(f'Hello, {first_name} ill help you with finding the capital of city', buttons=buttons)
 
+@client.on(events.CallbackQuery(pattern=b"usa"))
+async def nikoglai_answer(event):
+    await event.respond("341 mln")
 
-@client.on(events.NewMessage(pattern='Ukraine'))
-async def handler_some1(event):
-    await event.respond('Capital of Ukraine - Kiev')
 
-@client.on(events.NewMessage(pattern='USA'))
-async def handler_some1(event):
-    await event.respond('Capital of USA - Washington')
+@client.on(events.CallbackQuery(pattern=b"ukr"))
+async def nikoglai_answer(event):
+    await event.respond("31 mln")
 
-@client.on(events.NewMessage(pattern='Netherlands'))
-async def handler_some1(event):
-    await event.respond('Capital of Netherlands - Amsterdam')
+
+@client.on(events.CallbackQuery(pattern=b"ndr"))
+async def nikoglai_answer(event):
+    await event.respond("17 mln")
+
 
 
 async def main():
