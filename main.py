@@ -2,12 +2,12 @@ from telethon import TelegramClient, events, Button
 import sqlite3
 from os import getenv
 
-# Параметры аутентификации
+
 api_id = getenv("api_id")
 api_hash = getenv("api_hash")
 bot_token = getenv("bot_token")
 
-# Создание и настройка клиента Telegram
+
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 
 def create_db():
@@ -26,7 +26,7 @@ def create_db():
     conn.commit()
     conn.close()
 
-# Вызов функции для создания базы данных и таблицы
+
 create_db()
 
 def save_contact(user_id, phone_number, first_name, last_name):
@@ -81,6 +81,7 @@ async def handle_message(event):
             message = f'No contacts found with the name "{search_name}".'
 
         await event.respond(message)
+
 
 async def main():
     await client.start()
