@@ -19,7 +19,8 @@ async def start_handler(event):
         [button.text("Coц-мережи", resize=True)],
         [button.text("Адреси", resize=True)],
         [button.text("Прайс-ліст", resize=True)],
-        [button.text("Випадкова порада", resize=True)]
+        [button.text("Випадкова порада", resize=True)],
+        [button.text("Часті запитання", resize=True)]
     ]
     await event.respond("Привіт, я бот Rio Fitness Club 🤖", buttons = reply_buttons)
 
@@ -35,7 +36,7 @@ async def send_social_networks(event):
 @client.on(events.CallbackQuery)
 async def enter_social_link(event):
     if event.data == b"instagram":
-        await event.respond("Ось всі наші акаунти ->")
+        await event.respond("Ось всі наші акаунти інстаграм ->")
         rio_fitness_btn = [button.url("Клік", "https://www.instagram.com/rio_fitness_club")]
         await event.respond("Наш Інстаграм", buttons = rio_fitness_btn)
         rio_school_btn = [button.url("Клік", "https://www.instagram.com/rioschool")]
@@ -115,7 +116,33 @@ async def tip_answer(event):
     await event.edit(f"Ваша порада - {recomend_tip}", buttons=tip_btn)
 
 
+@client.on(events.NewMessage(pattern="Часті запитання"))
+async def faq(event):
+    await event.respond(
+        "Оберіть запитання",
+        buttons=[
+            [button.inline("Що взяти на тренування", b"workout_gear")],
+            [button.inline("Яка частота тренувань оптимальна для новачка?", b'training_frequency')],
+            [button.inline("Які додаткові послуги ви надаєте?", b"other_services")]
+        ]
+    )
 
+@client.on(events.CallbackQuery)
+async def answer_faq(event):
+    if event.data == b"workout_gear":
+        await event.respond('''
+**Список речей які варто взяти на тренування**
+• Змінне взуття - спортивні кросівки чи кеди
+• Вода - не треба більше 0.75л
+• Рушник - чистота залу та особиста гігієна
+• Змінна одежа - не забудьте взяти змінний одяг для комфортного перебування після тренування 
+З цим списком речей ви будете комфортно почувати себе у спорт-залі
+Бажаємо успіхів 🏆                        
+''')
+    if event.data == b"training_frequency":
+        await event.respond("Для новачка 2 рази на тиждень буде непоганим результатом.\nЯкщо ви вже більш на продвинутому рівні — 3 рази.\n4 рази на тиждень, якщо ви вже досягли високих результатів і хочете підтримувати або покращувати свою фізичну форму.")
+    if event.data == b'other_services':
+        await event.respond("Окрім тренувань ми пропонуємо вам -\n- Групові заняття стречінгом\n- Масажні процедури\n- Пробіжки у групах")
 
 async def main():
     await client.start()
