@@ -1,6 +1,6 @@
 from telethon import TelegramClient, events, Button as button
-from telethon.tl.types import InputMediaContact
-import sqlite3
+
+
 from os import getenv
 from random import choice
 
@@ -20,7 +20,8 @@ async def start_handler(event):
         [button.text("Адреси", resize=True)],
         [button.text("Прайс-ліст", resize=True)],
         [button.text("Випадкова порада", resize=True)],
-        [button.text("Часті запитання", resize=True)]
+        [button.text("Часті запитання", resize=True)],
+        [button.text("Тренери", resize=True)]
     ]
     await event.respond("Привіт, я бот Rio Fitness Club 🤖", buttons = reply_buttons)
 
@@ -85,7 +86,6 @@ async def enter_data_club(event):
         await event.respond("Скоро!\nНаразі Rio Fitness Club №6 перебуває у стадії будівництва.")
 
 
-
 @client.on(events.NewMessage(pattern="Прайс-ліст"))
 async def send_price_list(event):
     
@@ -131,7 +131,7 @@ async def faq(event):
 async def answer_faq(event):
     if event.data == b"workout_gear":
         await event.respond('''
-**Список речей які варто взяти на тренування**
+Список речей які варто взяти на тренування
 • Змінне взуття - спортивні кросівки чи кеди
 • Вода - не треба більше 0.75л
 • Рушник - чистота залу та особиста гігієна
@@ -143,6 +143,60 @@ async def answer_faq(event):
         await event.respond("Для новачка 2 рази на тиждень буде непоганим результатом.\nЯкщо ви вже більш на продвинутому рівні — 3 рази.\n4 рази на тиждень, якщо ви вже досягли високих результатів і хочете підтримувати або покращувати свою фізичну форму.")
     if event.data == b'other_services':
         await event.respond("Окрім тренувань ми пропонуємо вам -\n- Групові заняття стречінгом\n- Масажні процедури\n- Пробіжки у групах")
+
+
+
+@client.on(events.NewMessage(pattern="Тренери"))
+async def send_coach(event):
+    await event.respond("Оберіть тренера",
+    buttons = [
+        button.text("Жора"),
+        button.text("Марія"),
+        button.text("Олег"),
+        button.text("Катя"),
+        button.text("Дмитро"),
+    ])
+
+@client.on(events.NewMessage)
+async def answer_coach(event):
+    jora_path = '/Users/leonidlisovskiy/Desktop/telethonBot/telethonBot-2/imgs/jora.jpg'
+    marisha_path = '/Users/leonidlisovskiy/Desktop/telethonBot/telethonBot-2/imgs/marisha.jpg'
+    oleg_path = '/Users/leonidlisovskiy/Desktop/telethonBot/telethonBot-2/imgs/oleg.jpg'
+    katya_path = '/Users/leonidlisovskiy/Desktop/telethonBot/telethonBot-2/imgs/katya.jpg'
+    dima_path = '/Users/leonidlisovskiy/Desktop/telethonBot/telethonBot-2/imgs/dima.jpg'
+
+    if event.message.message == "Жора":
+        await event.respond("Жора 💪")
+        await client.send_file(event.chat_id, jora_path, caption='',
+        buttons= [button.url("Інстаграм Жори", "https://www.instagram.com/jora_hajime?igsh=M3BibjdqaTB3b29s")])
+    elif event.message.message == "Марія":
+        await event.respond("Марія 🌹")
+        await client.send_file(event.chat_id, marisha_path, caption='',
+        buttons= [
+                [button.url("Інстаграм Марії", "https://www.instagram.com/marisha_grechechka?igsh=ZjcxNTVxd2I0NHZ4")],
+                [button.url("Тік-Ток Марії", "https://www.tiktok.com/@mariagrechechka?_t=8oCycQUk59K&_r=1")]
+            ])
+    elif event.message.message == "Олег":
+        await event.respond("Олег 🏅")
+        await client.send_file(event.chat_id, oleg_path, caption='',
+        buttons=[
+            [button.url("Інстаграм Олега", "https://www.instagram.com/oleg_kirlan?igsh=MWF4bzc2MGN2ZnoyNQ==")]
+        ])
+    elif event.message.message == "Катя":
+        await event.respond("Катя 🌺")
+        await client.send_file(event.chat_id, katya_path, caption='',
+        buttons= [
+            [button.url("Інстаграм Каті", "https://www.instagram.com/ekgera_fit_coach?igsh=ZWZ2Z20ya2d4N3R4")],
+            [button.url("Тік-Ток Каті", "https://www.tiktok.com/@_gera46_?_t=8lzmC7nSgP0&_r=1&fbclid=PAZXh0bgNhZW0CMTEAAaYgnt-ECrYB5NFWDEPYGR5KZWx09Ha-47NOW6FHwaPJzCWWCvQ4ZO8STrw_aem_t8efuA6M9Vj3SOuUS1lr3Q")]
+        ]                       )
+    elif event.message.message == "Дмитро":
+        await event.respond("Дмитро ⚡")
+        await client.send_file(event.chat_id, dima_path, caption='',
+        buttons=[
+            [button.url("Інстаграм Дмитра", "https://www.instagram.com/grek0036?igsh=czJwcG8yZGw5bHBw")]
+        ])
+
+
 
 async def main():
     await client.start()
